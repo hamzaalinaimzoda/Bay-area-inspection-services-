@@ -1,0 +1,206 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Bay Area Inspection Services API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: contact
+    description: Contact form submissions
+  - name: booking
+    description: Booking submissions
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /contact:
+    post:
+      operationId: submitContact
+      tags: [contact]
+      summary: Submit contact form
+      description: Submits a quote request / contact form entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactInput"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactResult"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /booking:
+    post:
+      operationId: submitBooking
+      tags: [booking]
+      summary: Submit a booking request
+      description: Submits a booking request for an inspection appointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingInput"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingResult"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    ContactInput:
+      type: object
+      required:
+        - name
+        - phone
+        - email
+        - service
+        - address
+      properties:
+        name:
+          type: string
+          minLength: 1
+        phone:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          format: email
+        service:
+          type: string
+          enum:
+            - full-home-inspection
+            - mold-inspection
+            - gas-leak-detection
+            - moisture-water-damage
+            - home-mold-bundle
+            - other
+        address:
+          type: string
+          minLength: 1
+        message:
+          type: ["string", "null"]
+    ContactResult:
+      type: object
+      required:
+        - success
+        - message
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+    BookingInput:
+      type: object
+      required:
+        - name
+        - phone
+        - email
+        - service
+        - address
+        - preferredDate
+        - preferredTime
+      properties:
+        name:
+          type: string
+          minLength: 1
+        phone:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          format: email
+        service:
+          type: string
+          enum:
+            - full-home-inspection
+            - mold-inspection
+            - gas-leak-detection
+            - moisture-water-damage
+            - home-mold-bundle
+            - other
+        address:
+          type: string
+          minLength: 1
+        preferredDate:
+          type: string
+          format: date
+        preferredTime:
+          type: string
+          enum:
+            - 8am-11am
+            - 11am-2pm
+            - 2pm-5pm
+            - 5pm-8pm
+        notes:
+          type: ["string", "null"]
+    BookingResult:
+      type: object
+      required:
+        - success
+        - message
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        bookingId:
+          type: ["integer", "null"]
+    ApiError:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string

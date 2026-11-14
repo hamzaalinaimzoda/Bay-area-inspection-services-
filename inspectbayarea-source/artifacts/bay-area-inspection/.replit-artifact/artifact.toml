@@ -1,0 +1,37 @@
+kind = "web"
+previewPath = "/"
+title = "Bay Area Inspection Services"
+version = "1.0.0"
+id = "artifacts/bay-area-inspection"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24052
+
+[services.development]
+run = "pnpm --filter @workspace/bay-area-inspection run dev"
+
+# Served by a small Node process (server.mjs) rather than `serve = "static"`.
+# Replit's static serving sends everything uncompressed with `cache-control:
+# private`; server.mjs adds brotli/gzip and real cache headers, which measured
+# Lighthouse mobile performance 64 -> 93. server.mjs also handles the SPA
+# fallback that the `rewrites` block used to provide.
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/bay-area-inspection", "run", "build" ]
+
+[services.production.run]
+args = [ "node", "artifacts/bay-area-inspection/server.mjs" ]
+
+[services.production.run.env]
+PORT = "24052"
+NODE_ENV = "production"
+
+[services.env]
+PORT = "24052"
+BASE_PATH = "/"

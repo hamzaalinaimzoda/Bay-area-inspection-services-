@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Leads — Bay Area Inspection Services</title>
+<style>
+  /* Brand palette lifted from the marketing site so the two feel like one product. */
+  :root{
+    --navy:#1e3a5f; --navy-700:#16304f; --orange:#c9622a; --orange-600:#b05623;
+    --ink:#111827; --muted:#6b7280; --line:#e5e7eb; --bg:#f6f7f9; --card:#fff;
+    --green:#0f7b46; --red:#b42318; --amber:#b45309;
+    --radius:12px; --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.1);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  button,input,select,textarea{font:inherit;color:inherit}
+  a{color:var(--navy)}
+
+  header{background:var(--navy);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:16px;
+    position:sticky;top:0;z-index:20}
+  header h1{font-size:17px;margin:0;font-weight:700;letter-spacing:-.01em}
+  header .sp{flex:1}
+  header button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;
+    padding:7px 12px;border-radius:8px;cursor:pointer}
+  header button:hover{background:rgba(255,255,255,.2)}
+
+  main{max-width:1180px;margin:0 auto;padding:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+
+  /* Dashboard */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px}
+  .kpi{padding:14px 16px}
+  .kpi .label{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+  .kpi .value{font-size:26px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .kpi .sub{font-size:12px;color:var(--muted);margin-top:2px}
+  .kpi.hero{background:linear-gradient(135deg,var(--navy),var(--navy-700));color:#fff;border-color:transparent}
+  .kpi.hero .label,.kpi.hero .sub{color:rgba(255,255,255,.75)}
+
+  /* Toolbar */
+  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 14px}
+  .bar input[type=search]{flex:1;min-width:200px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:#fff}
+  .bar select{padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fff}
+  .btn{background:var(--navy);color:#fff;border:0;padding:9px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+  .btn:hover{background:var(--navy-700)}
+  .btn.alt{background:var(--orange)} .btn.alt:hover{background:var(--orange-600)}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line);font-weight:500}
+  .btn.ghost:hover{background:#f9fafb}
+
+  /* Table */
+  table{width:100%;border-collapse:collapse}
+  th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);text-align:left;
+     padding:10px 14px;border-bottom:1px solid var(--line);font-weight:600;white-space:nowrap}
+  td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr{cursor:pointer}
+  tbody tr:hover{background:#fafbfc}
+  tbody tr:last-child td{border-bottom:0}
+  .name{font-weight:600}
+  .sub{color:var(--muted);font-size:13px}
+  .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  /* Stage pills — colour encodes progress, so the board reads at a glance. */
+  .pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+  .s-new{background:#e0e7ff;color:#3730a3}
+  .s-contacted{background:#e0f2fe;color:#075985}
+  .s-quoted{background:#fef3c7;color:#92400e}
+  .s-scheduled{background:#ede9fe;color:#5b21b6}
+  .s-inspected{background:#cffafe;color:#155e75}
+  .s-won{background:#d1fae5;color:#065f46}
+  .s-lost{background:#f3f4f6;color:#4b5563}
+  .src{font-size:12px;color:var(--muted)}
+
+  /* Detail drawer */
+  .scrim{position:fixed;inset:0;background:rgba(17,24,39,.45);display:none;z-index:30}
+  .scrim.open{display:block}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(520px,100%);background:#fff;z-index:31;
+    transform:translateX(100%);transition:transform .18s ease;display:flex;flex-direction:column;overflow:auto}
+  .drawer.open{transform:none}
+  .drawer h2{margin:0;font-size:18px}
+  .dhead{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:10px;
+    position:sticky;top:0;background:#fff}
+  .dbody{padding:18px;display:flex;flex-direction:column;gap:18px}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .field input,.field select,.field textarea{padding:9px 11px;border:1px solid var(--line);border-radius:8px;width:100%;background:#fff}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .stages{display:flex;flex-wrap:wrap;gap:6px}
+  .stages button{padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:13px}
+  .stages button[aria-pressed=true]{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600}
+  .events{display:flex;flex-direction:column;gap:10px;max-height:260px;overflow:auto}
+  .ev{border-left:2px solid var(--line);padding:2px 0 2px 10px}
+  .ev .when{font-size:12px;color:var(--muted)}
+  .empty{padding:40px 16px;text-align:center;color:var(--muted)}
+  .err{background:#fef2f2;border:1px solid #fecaca;color:var(--red);padding:10px 12px;border-radius:8px;font-size:14px}
+  .ok{background:#ecfdf5;border:1px solid #a7f3d0;color:var(--green);padding:10px 12px;border-radius:8px;font-size:14px}
+
+  /* Login */
+  .login{max-width:360px;margin:14vh auto;padding:26px}
+  .login h1{margin:0 0 6px;font-size:20px}
+  .login p{margin:0 0 18px;color:var(--muted);font-size:14px}
+  .login input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;margin-bottom:12px}
+  .login .btn{width:100%}
+  .hide{display:none !important}
+  @media (max-width:720px){ .hide-sm{display:none} main{padding:12px} }
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="loginView" class="hide">
+  <div class="login card">
+    <h1>Bay Area Inspection Services</h1>
+    <p>Sign in to view your leads.</p>
+    <div id="loginErr" class="err hide" style="margin-bottom:12px"></div>
+    <form id="loginForm">
+      <input id="pw" type="password" placeholder="Password" autocomplete="current-password" required>
+      <button class="btn" type="submit">Sign in</button>
+    </form>
+  </div>
+</div>
+
+<!-- App -->
+<div id="appView" class="hide">
+  <header>
+    <h1>Leads</h1>
+    <span class="sp"></span>
+    <select id="window" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:7px 10px;border-radius:8px">
+      <option value="30">Last 30 days</option>
+      <option value="90" selected>Last 90 days</option>
+      <option value="365">Last year</option>
+      <option value="730">All time</option>
+    </select>
+    <button id="logout">Sign out</button>
+  </header>
+
+  <main>
+    <div id="msg"></div>
+    <div class="kpis" id="kpis"></div>
+
+    <div class="bar">
+      <input id="q" type="search" placeholder="Search name, phone, email, address…">
+      <select id="stage">
+        <option value="open" selected>Open pipeline</option>
+        <option value="">All stages</option>
+        <option value="new">New</option><option value="contacted">Contacted</option>
+        <option value="quoted">Quoted</option><option value="scheduled">Scheduled</option>
+        <option value="inspected">Inspected</option><option value="won">Won</option><option value="lost">Lost</option>
+      </select>
+      <select id="source">
+        <option value="">All sources</option>
+        <option value="website_booking">Website booking</option>
+        <option value="website_booking_started">Booking started, not finished</option>
+        <option value="website_contact">Website contact</option>
+        <option value="phone">Phone</option>
+        <option value="google_business">Google Business</option>
+        <option value="referral">Referral</option>
+        <option value="repeat_client">Repeat client</option>
+        <option value="other">Other</option>
+      </select>
+      <button class="btn alt" id="addBtn">+ Log a call</button>
+      <button class="btn ghost" id="backfillBtn" title="Import bookings and contacts submitted before the CRM existed">Import past</button>
+    </div>
+
+    <div class="card"><table>
+      <thead><tr>
+        <th>Name</th><th class="hide-sm">Service</th><th>Stage</th>
+        <th class="hide-sm">Source</th><th class="num">Value</th><th class="num hide-sm">Received</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+  </main>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Lead detail"></aside>
+
+<script type="module">
+const $ = (s) => document.querySelector(s);
+const API = "/api";
+
+const STAGES = ["new","contacted","quoted","scheduled","inspected","won","lost"];
+const LOST = ["price","timing","went_elsewhere","out_of_area","not_qualified","no_response","spam","other"];
+const SOURCES = ["website_booking","website_contact","phone","google_business","referral","repeat_client","other"];
+const title = (s) => (s||"").replace(/_/g," ").replace(/\b\w/g,(c)=>c.toUpperCase());
+const money = (cents) => cents==null ? "—" : "$"+(cents/100).toLocaleString(undefined,{maximumFractionDigits:0});
+const when = (iso) => { const d=new Date(iso); const days=Math.floor((Date.now()-d)/864e5);
+  return days===0?"Today":days===1?"Yesterday":days<30?days+"d ago":d.toLocaleDateString(); };
+const esc = (s) => String(s??"").replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+async function api(path, opts={}) {
+  const res = await fetch(API+path, {
+    credentials:"same-origin",
+    headers:{ "content-type":"application/json" },
+    ...opts,
+  });
+  if (res.status === 401) { show("login"); throw new Error("Not signed in"); }
+  const data = await res.json().catch(()=>null);
+  if (!res.ok) throw new Error(data?.error || "Request failed");
+  return data;
+}
+
+function show(which){ $("#loginView").classList.toggle("hide", which!=="login");
+                      $("#appView").classList.toggle("hide", which!=="app"); }
+function flash(text, kind="ok"){ $("#msg").innerHTML = `<div class="${kind}" style="margin-bottom:14px">${esc(text)}</div>`;
+                                 setTimeout(()=>{ $("#msg").innerHTML=""; }, 4000); }
+
+/* ---------------- dashboard ---------------- */
+async function loadMetrics(){
+  const days = $("#window").value;
+  const m = await api(`/crm/metrics?days=${days}`);
+  const rate = m.closeRate==null ? "—" : Math.round(m.closeRate*100)+"%";
+  // Value per lead is the number that decides whether ad spend is profitable:
+  // close rate multiplied by average job value.
+  const vpl = m.valuePerLeadCents==null ? "—" : money(m.valuePerLeadCents);
+  $("#kpis").innerHTML = `
+    <div class="card kpi hero">
+      <div class="label">Value per lead</div>
+      <div class="value">${vpl}</div>
+      <div class="sub">${m.closeRate==null?"Need won/lost data":"Compare against cost per lead"}</div>
+    </div>
+    <div class="card kpi"><div class="label">Close rate</div><div class="value">${rate}</div>
+      <div class="sub">${m.decided} decided</div></div>
+    <div class="card kpi"><div class="label">Open pipeline</div><div class="value">${m.totals.open}</div>
+      <div class="sub">${m.totals.total} leads in window</div></div>
+    <div class="card kpi"><div class="label">Revenue won</div><div class="value">${money(m.totals.revenueCents)}</div>
+      <div class="sub">avg ${money(m.avgJobCents)}</div></div>
+    <div class="card kpi"><div class="label">Spam filtered</div><div class="value">${m.totals.spam}</div>
+      <div class="sub">excluded from rates</div></div>`;
+}
+
+/* ---------------- list ---------------- */
+let debounce;
+async function loadLeads(){
+  const p = new URLSearchParams();
+  if ($("#stage").value) p.set("stage", $("#stage").value);
+  if ($("#source").value) p.set("source", $("#source").value);
+  if ($("#q").value.trim()) p.set("q", $("#q").value.trim());
+  const { leads } = await api("/crm/leads?"+p);
+  $("#rows").innerHTML = leads.length ? leads.map(rowHtml).join("")
+    : `<tr><td colspan="6" class="empty">No leads yet. Use <strong>Import past</strong> to pull in earlier website submissions, or <strong>Log a call</strong> for a phone enquiry.</td></tr>`;
+  document.querySelectorAll("#rows tr[data-id]").forEach((tr)=>
+    tr.addEventListener("click", ()=>openLead(tr.dataset.id)));
+}
+function rowHtml(l){
+  const value = l.stage==="won" ? l.wonValueCents : l.quotedValueCents;
+  return `<tr data-id="${l.id}">
+    <td><div class="name">${esc(l.name)}</div>
+        <div class="sub">${esc(l.phone||l.email||"")}</div></td>
+    <td class="hide-sm">${esc(title(l.service)||"—")}<div class="sub">${esc(l.city||"")}</div></td>
+    <td><span class="pill s-${l.stage}">${title(l.stage)}</span></td>
+    <td class="hide-sm"><span class="src">${esc(title(l.source))}</span></td>
+    <td class="num">${money(value)}</td>
+    <td class="num hide-sm sub">${when(l.createdAt)}</td></tr>`;
+}
+
+/* ---------------- detail ---------------- */
+function closeDrawer(){ $("#drawer").classList.remove("open"); $("#scrim").classList.remove("open"); }
+$("#scrim").addEventListener("click", closeDrawer);
+document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeDrawer(); });
+
+async function openLead(id){
+  const { lead, events } = await api(`/crm/leads/${id}`);
+  const d = $("#drawer");
+  d.innerHTML = `
+    <div class="dhead">
+      <div style="flex:1">
+        <h2>${esc(lead.name)}</h2>
+        <div class="sub">${esc(title(lead.source))} · ${when(lead.createdAt)}</div>
+      </div>
+      <button class="btn ghost" id="closeD">Close</button>
+    </div>
+    <div class="dbody">
+      <div class="field"><label>Stage</label>
+        <div class="stages">${STAGES.map((s)=>
+          `<button data-stage="${s}" aria-pressed="${s===lead.stage}">${title(s)}</button>`).join("")}</div></div>
+
+      <div id="outcome"></div>
+
+      <div class="row2">
+        <div class="field"><label>Phone</label><input id="f_phone" value="${esc(lead.phone||"")}"></div>
+        <div class="field"><label>Email</label><input id="f_email" value="${esc(lead.email||"")}"></div>
+      </div>
+      <div class="field"><label>Address</label><input id="f_address" value="${esc(lead.address||"")}"></div>
+      <div class="row2">
+        <div class="field"><label>Property</label>
+          <select id="f_prop">${["unknown","single_family","condo","multi_unit","commercial"].map((p)=>
+            `<option value="${p}" ${p===lead.propertyType?"selected":""}>${title(p)}</option>`).join("")}</select></div>
+        <div class="field"><label>Quoted ($)</label>
+          <input id="f_quoted" inputmode="decimal" value="${lead.quotedValueCents!=null?lead.quotedValueCents/100:""}"></div>
+      </div>
+      <div class="field"><label>Notes</label><textarea id="f_notes" rows="3">${esc(lead.notes||"")}</textarea></div>
+      <button class="btn" id="saveBtn">Save changes</button>
+
+      <div class="field"><label>Add to history</label>
+        <textarea id="f_ev" rows="2" placeholder="Called — left voicemail…"></textarea>
+        <button class="btn ghost" id="evBtn" style="align-self:flex-start">Add note</button></div>
+
+      <div class="field"><label>History</label>
+        <div class="events">${events.length?events.map((e)=>`
+          <div class="ev"><div>${esc(e.body||title(e.type))}</div>
+          <div class="when">${new Date(e.createdAt).toLocaleString()}</div></div>`).join("")
+          :'<div class="sub">Nothing logged yet.</div>'}</div></div>
+    </div>`;
+
+  const outcome = () => {
+    const st = d.querySelector(".stages button[aria-pressed=true]")?.dataset.stage;
+    // Won asks for the invoiced amount; lost asks why. Showing both at all times
+    // would clutter the common case, and the two are never needed together.
+    $("#outcome").innerHTML =
+      st==="won" ? `<div class="field"><label>Invoiced amount ($)</label>
+          <input id="f_won" inputmode="decimal" value="${lead.wonValueCents!=null?lead.wonValueCents/100:""}"
+            placeholder="What you actually billed"></div>`
+      : st==="lost" ? `<div class="field"><label>Reason lost</label>
+          <select id="f_lost">${LOST.map((r)=>`<option value="${r}" ${r===lead.lostReason?"selected":""}>${title(r)}</option>`).join("")}</select>
+          <div class="sub">Marking a lead <strong>spam</strong> keeps it out of your close rate.</div></div>`
+      : "";
+  };
+  outcome();
+
+  d.querySelectorAll(".stages button").forEach((b)=> b.addEventListener("click", ()=>{
+    d.querySelectorAll(".stages button").forEach((x)=>x.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true"); outcome();
+  }));
+  $("#closeD").addEventListener("click", closeDrawer);
+
+  $("#saveBtn").addEventListener("click", async ()=>{
+    const stage = d.querySelector(".stages button[aria-pressed=true]").dataset.stage;
+    const body = {
+      stage,
+      phone: $("#f_phone").value || null,
+      email: $("#f_email").value || null,
+      address: $("#f_address").value || null,
+      propertyType: $("#f_prop").value,
+      notes: $("#f_notes").value || null,
+    };
+    const q = $("#f_quoted").value.trim(); if (q) body.quotedValue = q;
+    const w = $("#f_won")?.value?.trim(); if (w) body.wonValue = w;
+    const lr = $("#f_lost")?.value; if (lr) body.lostReason = lr;
+    try {
+      await api(`/crm/leads/${id}`, { method:"PATCH", body: JSON.stringify(body) });
+      closeDrawer(); await refresh(); flash("Saved.");
+    } catch (e) { flash(e.message, "err"); }
+  });
+
+  $("#evBtn").addEventListener("click", async ()=>{
+    const body = $("#f_ev").value.trim(); if (!body) return;
+    try { await api(`/crm/leads/${id}/events`, { method:"POST", body: JSON.stringify({ type:"note", body }) });
+          openLead(id); } catch (e) { flash(e.message, "err"); }
+  });
+
+  d.classList.add("open"); $("#scrim").classList.add("open");
+}
+
+/* ---------------- manual lead ---------------- */
+$("#addBtn").addEventListener("click", ()=>{
+  const d = $("#drawer");
+  d.innerHTML = `
+    <div class="dhead"><div style="flex:1"><h2>Log a call</h2>
+      <div class="sub">Phone and Google Business enquiries</div></div>
+      <button class="btn ghost" id="closeD">Close</button></div>
+    <div class="dbody">
+      <div class="field"><label>Name *</label><input id="n_name" required></div>
+      <div class="row2">
+        <div class="field"><label>Phone</label><input id="n_phone" inputmode="tel"></div>
+        <div class="field"><label>Email</label><input id="n_email" inputmode="email"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Source</label><select id="n_source">${SOURCES.map((s)=>
+          `<option value="${s}" ${s==="phone"?"selected":""}>${title(s)}</option>`).join("")}</select></div>
+        <div class="field"><label>Service</label><select id="n_service">
+          <option value="">—</option>
+          <option value="full-home-inspection">Full home inspection</option>
+          <option value="mold-inspection">Mold inspection</option>
+          <option value="moisture-water-damage">Moisture / water damage</option>
+          <option value="gas-leak-detection">Gas leak detection</option>
+          <option value="home-mold-bundle">Home + mold bundle</option>
+        </select></div>
+      </div>
+      <div class="field"><label>Address</label><input id="n_address"></div>
+      <div class="row2">
+        <div class="field"><label>City</label><input id="n_city"></div>
+        <div class="field"><label>Quoted ($)</label><input id="n_quoted" inputmode="decimal"></div>
+      </div>
+      <div class="field"><label>Notes</label><textarea id="n_notes" rows="3"></textarea></div>
+      <button class="btn" id="createBtn">Add lead</button>
+    </div>`;
+  $("#closeD").addEventListener("click", closeDrawer);
+  $("#createBtn").addEventListener("click", async ()=>{
+    const name = $("#n_name").value.trim();
+    if (!name) { flash("Name is required.", "err"); return; }
+    const body = { name, source:$("#n_source").value };
+    for (const [k,el] of Object.entries({phone:"n_phone",email:"n_email",service:"n_service",
+                                         address:"n_address",city:"n_city",notes:"n_notes"})) {
+      const v = $("#"+el).value.trim(); if (v) body[k]=v;
+    }
+    const q = $("#n_quoted").value.trim(); if (q) body.quotedValue = q;
+    try { await api("/crm/leads", { method:"POST", body: JSON.stringify(body) });
+          closeDrawer(); await refresh(); flash("Lead added."); }
+    catch (e) { flash(e.message, "err"); }
+  });
+  d.classList.add("open"); $("#scrim").classList.add("open");
+});
+
+$("#backfillBtn").addEventListener("click", async ()=>{
+  try { const r = await api("/crm/backfill", { method:"POST" });
+        await refresh(); flash(r.created ? `Imported ${r.created} past enquir${r.created===1?"y":"ies"}.` : "Already up to date."); }
+  catch (e) { flash(e.message, "err"); }
+});
+
+/* ---------------- wiring ---------------- */
+/*
+ * Never leave the operator staring at an empty screen.
+ *
+ * Metrics and the list are loaded independently and each failure is reported in
+ * place, so a database hiccup that breaks one does not blank the other. Found
+ * while testing against an unreachable database: login succeeded, both requests
+ * rejected, and the page rendered nothing at all with no explanation.
+ */
+async function refresh(){
+  const results = await Promise.allSettled([loadMetrics(), loadLeads()]);
+  const failed = results.filter((r) => r.status === "rejected");
+  if (failed.length === results.length) {
+    $("#kpis").innerHTML = "";
+    $("#rows").innerHTML = `<tr><td colspan="6" class="empty">
+      Could not reach the server. Check your connection and reload.</td></tr>`;
+    flash(failed[0].reason?.message || "Could not load your leads.", "err");
+  } else if (failed.length) {
+    flash(failed[0].reason?.message || "Some data could not be loaded.", "err");
+  }
+}
+$("#q").addEventListener("input", ()=>{ clearTimeout(debounce); debounce=setTimeout(loadLeads,250); });
+$("#stage").addEventListener("change", loadLeads);
+$("#source").addEventListener("change", loadLeads);
+$("#window").addEventListener("change", loadMetrics);
+$("#logout").addEventListener("click", async ()=>{ await api("/crm/logout",{method:"POST"}); show("login"); });
+
+$("#loginForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  $("#loginErr").classList.add("hide");
+  try {
+    const res = await fetch(API+"/crm/login", { method:"POST", credentials:"same-origin",
+      headers:{"content-type":"application/json"}, body: JSON.stringify({ password: $("#pw").value }) });
+    const data = await res.json().catch(()=>null);
+    if (!res.ok) throw new Error(data?.error || "Sign in failed");
+    $("#pw").value=""; show("app"); await refresh();
+  } catch (err) {
+    $("#loginErr").textContent = err.message; $("#loginErr").classList.remove("hide");
+  }
+});
+
+(async function init(){
+  try {
+    const s = await fetch(API+"/crm/session", { credentials:"same-origin" }).then((r)=>r.json());
+    if (!s.configured) {
+      document.body.innerHTML = `<div class="login card"><h1>CRM not configured</h1>
+        <p>Set <code>CRM_PASSWORD</code> and <code>CRM_SESSION_SECRET</code> on the server, then reload.</p></div>`;
+      return;
+    }
+    if (s.authenticated) { show("app"); await refresh(); } else { show("login"); }
+  } catch { show("login"); }
+})();
+</script>
+</body>
+</html>

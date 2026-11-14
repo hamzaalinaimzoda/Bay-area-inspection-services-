@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Google Tag Manager. Google's snippet, except that gtm.js is fetched
+         once the browser is idle after load, like the Ads tag further down:
+         the container pulls in gtag.js, and loading it eagerly put that
+         script's ~350ms of main-thread work back inside the LCP/TBT window.
+         The gtm.js event is still queued here, so the container's tags fire
+         as usual when it arrives. -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+      window.addEventListener('load', function () {
+        function loadGtmScript() {
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-WG2RBC5N';
+          document.head.appendChild(s);
+        }
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(loadGtmScript, { timeout: 4000 });
+        } else {
+          setTimeout(loadGtmScript, 2000);
+        }
+      });
+    </script>
+    <!-- End Google Tag Manager -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Warm the Plausible connection before anything else in <head>. The browser
+      otherwise discovers this origin only when it reaches the script tag far
+      below, after ~15KB of JSON-LD; Lighthouse measured that late discovery at
+      338ms of LCP delay on Slow 4G. Placed first so the DNS/TCP/TLS handshake
+      overlaps HTML parsing rather than serialising after it.
+    -->
+    <link rel="preconnect" href="https://plausible.io" crossorigin>
+    <link rel="dns-prefetch" href="https://plausible.io">
+    <!--
+      Google Search Console ownership verification. Kept alongside the
+      public/googleadd083d6cc3ea556.html file so verification survives if
+      either method stops being served. Removing either one can un-verify
+      the domain, which breaks the Search Console <-> Google Ads link.
+    -->
+    <meta name="google-site-verification" content="9pcIxFiuLIOt005eSvAVqXGg_da8pSmZlQRnBF4UfFc" />
+    <title>San Francisco Home Inspection | Bay Area Inspection Services</title>
+    <meta name="description" content="Certified San Francisco home inspections by a former builder. Infrared imaging, same-day reports, and mold and moisture testing across the Bay Area." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://inspectbayarea.com/" />
+    <meta property="og:title" content="San Francisco Home Inspection | Bay Area Inspection Services" />
+    <meta property="og:description" content="Certified home inspections across San Francisco and the Bay Area by a former builder. Infrared imaging included, same-day reports. Mold and moisture testing available." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://inspectbayarea.com/" />
+    <meta property="og:image" content="https://inspectbayarea.com/opengraph.jpg" />
+    <meta property="og:site_name" content="Bay Area Inspection Services" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="San Francisco Home Inspection | Bay Area Inspection Services" />
+    <meta name="twitter:description" content="Certified home inspections across San Francisco and the Bay Area. Same-day reports by a former builder." />
+    <meta name="twitter:image" content="https://inspectbayarea.com/opengraph.jpg" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["LocalBusiness", "ProfessionalService"],
+  "name": "Bay Area Inspection Services",
+  "legalName": "Bay Area Inspection Services LLC",
+  "url": "https://inspectbayarea.com",
+  "image": "https://inspectbayarea.com/opengraph.jpg",
+  "telephone": "+16282300357",
+  "email": "info@inspectbayarea.com",
+  "paymentAccepted": "Credit Card, Debit Card, Zelle, Venmo, Cash App, Check, Cash",
+  "description": "Certified home inspections in San Francisco by a former builder. Soft-story, dry rot, in-law units and Victorian/Edwardian specialist. Infrared imaging included on every inspection, same-day reports. Mold and moisture testing available.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "CA",
+    "addressCountry": "US"
+  },
+  "areaServed": [
+    "San Francisco", "Daly City", "South San Francisco",
+    "Palo Alto", "Mountain View", "Los Altos", "Los Altos Hills", "Sunnyvale",
+    "Menlo Park", "Redwood City", "East Palo Alto", "Cupertino", "San Jose",
+    "Santa Clara", "Atherton", "Portola Valley", "Woodside", "Saratoga",
+    "Campbell", "Los Gatos", "Milpitas", "Fremont", "Newark", "Union City",
+    "Hayward", "San Mateo", "Belmont", "Foster City"
+  ],
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    "opens": "08:00",
+    "closes": "20:00"
+  }],
+  "hasCredential": [
+    {
+      "@type": "EducationalOccupationalCredential",
+      "name": "InterNACHI Certified Professional Inspector (CPI)",
+      "credentialCategory": "certification",
+      "identifier": "NACHI26061702",
+      "url": "https://www.nachi.org/verify?nachiid=NACHI26061702",
+      "recognizedBy": {
+        "@type": "Organization",
+        "name": "International Association of Certified Home Inspectors (InterNACHI)",
+        "url": "https://www.nachi.org"
+      }
+    }
+  ],
+  "knowsAbout": [
+    "Home Inspection", "Mold Inspection", "Thermal Imaging", "Air Quality Testing",
+    "Soft Story Buildings", "Dry Rot", "Victorian and Edwardian Homes",
+    "Unpermitted In-Law Units", "Liquefaction Zones", "Gas Leak Detection"
+  ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Inspection services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Full Home Inspection",
+          "description": "A top-to-bottom evaluation by a former builder who knows exactly where problems hide.",
+          "url": "https://inspectbayarea.com/services/full-home-inspection"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Mold Inspection & Air Quality Assessment",
+          "description": "A thermal and moisture-based mold assessment that finds the source, not just the spot on the wall.",
+          "url": "https://inspectbayarea.com/services/mold-inspection"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Moisture & Water Damage Inspection",
+          "description": "Infrared thermal imaging that locates hidden water intrusion before it becomes mold.",
+          "url": "https://inspectbayarea.com/services/moisture-water-damage"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Gas Leak Detection",
+          "description": "Precision detection of natural gas leaks to keep your family safe.",
+          "url": "https://inspectbayarea.com/services/gas-leak-detection"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Combined Home + Mold Bundle",
+          "description": "Total peace of mind — our two most-requested inspections in one discounted visit.",
+          "url": "https://inspectbayarea.com/services/home-mold-bundle"
+        }
+      }
+    ]
+  },
+  "sameAs": [
+    "https://www.google.com/maps/place/?q=place_id:ChIJ-xSm-rE4HaoR8MZCAsKKxi8",
+    "https://www.nachi.org/verify?nachiid=NACHI26061702"
+  ]
+}
+    </script>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <!-- Self-hosted Inter. Preloaded so it lands before first paint, which removes
+         the font-swap layout shift that previously accounted for nearly all CLS. -->
+    <link rel="preload" href="/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+    <!-- Google Ads conversion tag. gtag.js itself costs ~350ms of main-thread
+         script evaluation and 60KB of mostly-unused JS on first load — real
+         weight, measured, that was landing squarely inside the LCP/TBT
+         window when loaded eagerly. Nothing about conversion tracking needs
+         to be ready in the first 100ms, so dataLayer/gtag are defined
+         immediately (cheap — just a queue), but the actual script tag is
+         only injected once the browser is idle after load. Calls made before
+         that — including any from src/lib/analytics.ts — still queue
+         correctly since gtag() just pushes to dataLayer. -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-18237540837');
+      function loadGtagScript() {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18237540837';
+        document.head.appendChild(s);
+      }
+      if ('requestIdleCallback' in window) {
+        window.addEventListener('load', function () {
+          requestIdleCallback(loadGtagScript, { timeout: 4000 });
+        });
+      } else {
+        window.addEventListener('load', function () {
+          setTimeout(loadGtagScript, 2000);
+        });
+      }
+    </script>
+    <!-- Non-essential analytics loads after the page is ready and idle.
+         Keep the queue immediate so early events are not lost. -->
+    <script>
+      window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init();
+      function loadPlausible() {
+        if (document.getElementById('plausible-script')) return;
+        var script = document.createElement('script');
+        script.id = 'plausible-script';
+        script.async = true;
+        script.defer = true;
+        script.src = 'https://plausible.io/js/script.js';
+        script.setAttribute('data-domain', 'inspectbayarea.com');
+        document.head.appendChild(script);
+      }
+      function schedulePlausible() {
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(loadPlausible, { timeout: 4000 });
+        } else {
+          setTimeout(loadPlausible, 2000);
+        }
+      }
+      if (document.readyState === 'complete') schedulePlausible();
+      else window.addEventListener('load', schedulePlausible, { once: true });
+    </script>
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WG2RBC5N"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <div id="root"></div>
+    <script type="module" defer src="/src/main.tsx"></script>
+  </body>
+</html>
